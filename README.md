@@ -1,5 +1,6 @@
 # CodeComp Python Player
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/y/SKAUL05/cc-python-gae?logo=github)](https://github.com/SKAUL05/cc-python-gae/commits/master) [![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/SKAUL05/cc-python-gae.svg?logo=github&style=social)](https://github.com/SKAUL05/) [![GitHub last commit](https://img.shields.io/github/last-commit/SKAUL05/cc-python-gae.svg?style=social&logo=git)](https://github.com/SKAUL05/)
+![Deploy to GAE](https://github.com/SKAUL05/cc-python-gae/workflows/Deploy%20to%20GAE/badge.svg)
 
 
 ### Guide to deploy to Google App Engine using Github Actions
