@@ -35,5 +35,5 @@
   - Again click on New Secret and add Name as **ACCOUNT_KEY** and value as *contents of json file that you downloaded and click on Add Secret
 
 
-### Now you are good to go, whenever you push anything to your master branch it will get deployed to your Google App Engine.
-### App Engine URL : https://<PROJECT_ID>.uc.r.appspot.com/
+#### Now you are good to go, whenever you push anything to your repo's master branch it will get deployed to Google App Engine of your GCP Project.
+#### App Engine URL : https://<PROJECT_ID>.uc.r.appspot.com/
