@@ -24,6 +24,9 @@ jobs:
           gcloud services enable appengine.googleapis.com
           gcloud app create --region="us-central" || echo "App Already Present"
           gcloud app deploy --quiet --project=${{ secrets.PROJECT_ID }}
+      - name: Print URL
+        run: |-
+          echo ${{ steps.deploy.outputs }}
         
 #       - id : 'deploy'
 #       - run: |-
