@@ -36,4 +36,4 @@
 
 
 ### Now you are good to go, whenever you push anything to your master branch it will get deployed to your Google App Engine.
-### App Engine URL : https://PROJECT_ID.uc.r.appspot.com/
+### App Engine URL : https://<PROJECT_ID>.uc.r.appspot.com/
