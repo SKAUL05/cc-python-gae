@@ -26,7 +26,7 @@ jobs:
           gcloud app deploy --quiet --project=${{ secrets.PROJECT_ID }}
       - name: Print URL
         run: |-
-          echo ${{ steps.deploy.outputs }}
+          echo ${{ steps.deploy.outputs.url }}
         
 #       - id : 'deploy'
 #       - run: |-
