@@ -23,7 +23,7 @@ jobs:
     steps:
     - id : 'deploy'
     - name: 'Deploy to GAE' 
-      run: |-
+    - run: |-
           gcloud services enable appengine.googleapis.com
           gcloud app create --region="us-central" || echo "App Already Present"
           gcloud app deploy --quiet --project=${{ secrets.PROJECT_ID }}
