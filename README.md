@@ -28,11 +28,11 @@
 
 - Add Github Secrets
   - Go to repo that you forked from https://github.com/SKAUL05/cc-python-gae
-  - Go to Settings > Secrets
-  - Click on New Secret and add Name as PROJECT_ID and value as Project ID of your GCP Project and click on Add Secret
+  - Go to **Settings > Secrets**
+  - Click on **New Secret** and add Name as **PROJECT_ID** and value as Project ID of your GCP Project and click on Add Secret
   ![New Secret](/assets/secret-project.JPG)
 
-  - Again click on New Secret and add Name as ACCOUNT_KEY and value as *contents of json file that you downloaded and click on Add Secret
+  - Again click on New Secret and add Name as **ACCOUNT_KEY** and value as *contents of json file that you downloaded and click on Add Secret
 
 
 ### Now you are good to go, whenever you push anything to your master branch it will get deployed to your Google App Engine.
