@@ -16,15 +16,13 @@ jobs:
     - uses: actions/checkout@v2
 
     # Setup gcloud CLI
-    - name: "Setup gcloud CLI"
+    - name: "Setup gcloud CLI and deploy to GAE"
     - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
       with:
         version: '290.0.1'
         service_account_key: $SA_KEY
         project_id: $PROJECT_ID
         export_default_credentials: true
-
-    - name: "Create & Deploy"
     - run: |-
           gcloud services enable appengine.googleapis.com
           gcloud app create --region="us-central" || echo "App Already Present"
