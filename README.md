@@ -40,5 +40,5 @@
 #### Now you are good to go, whenever you push anything to your repo's master branch it will get deployed to Google App Engine of your GCP Project using Github Actions.
  - Whenever you push to master branch you can see your Github Action Running like in below image
  ![Github Action Running](/assets/gae-deploy-github-action.JPG)
- - When this Action gets completed you can headover to App Engine URL : **https://< GCP_PROJECT_ID >.uc.r.appspot.com/** where GCP_PROJECT_ID is Project ID of your Google Cloud Platform project.
+ - When this Action gets completed you can headover to App Engine URL : **https://< GCP_PROJECT_ID >.uc.r.appspot.com/** where **GCP_PROJECT_ID** is **Project ID** of your Google Cloud Platform project.
  ![Github Action Complete](/assets/gae-deploy-complete.JPG)
