@@ -1,4 +1,6 @@
+from google.cloud import tasks_v2
 import requests
+import datetime
 
 
 def to_dict(response_obj):
@@ -40,3 +42,27 @@ def make_request(method, url, **kwargs):
         error, data, status = to_dict(response)
 
         return error, data
+
+
+def create_task(project, location, queue="default", payload=None, in_seconds=None):
+
+    client = tasks_v2.CloudTasksClient()
+    parent = client.queue_path(project, location, queue)
+    task = {
+        "app_engine_http_request": {  # Specify the type of request.
+            "http_method": tasks_v2.HttpMethod.POST,
+            "relative_uri": "/example_task_handler",
+        }
+    }
+    if payload is not None:
+        converted_payload = payload.encode()
+        task["app_engine_http_request"]["body"] = converted_payload
+
+    if in_seconds is not None:
+        timestamp = datetime.datetime.utcnow() + datetime.timedelta(seconds=in_seconds)
+        task["schedule_time"] = timestamp
+
+    response = client.create_task(parent=parent, task=task)
+
+    print("Created task {}".format(response.name))
+    return response
