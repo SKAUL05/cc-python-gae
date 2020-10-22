@@ -16,7 +16,7 @@ def apply_guess(*args, **kwargs):
             not kwargs.get("participants", {})[index]["isAlive"]
             or kwargs.get("participants", {})[index]["name"] == _TEAM.upper()
         ):
-            dead_participants.append(index)
+            dead_participants_index.append(index)
 
     if len(dead_participants_index) > 0:
         for index in sorted(dead_participants_index, reverse=True):
