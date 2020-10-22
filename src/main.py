@@ -6,6 +6,7 @@ from config import _TEAM
 from game_api import get_game_status, join_game, make_guess
 from my_smart_algo import apply_guess
 from colorama import init, Fore, Style
+from utils import create_task
 
 app = Flask(__name__)
 _MY_GUESS_TRACKER = {}
@@ -122,6 +123,7 @@ def apply_logic(request):
 
 @app.route("/")
 def root():
+    print(os.getenv('APPLICATION_ID'))
     init(autoreset=True)
     team = _TEAM
     if team is None or _TEAM.strip() == "":
