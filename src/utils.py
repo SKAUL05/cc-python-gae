@@ -44,12 +44,12 @@ def make_request(method, url, **kwargs):
         return error, data
 
 
-def create_task(project, uri, location = "us-central1",queue="default", payload=None, in_seconds=None):
+def create_task(project, uri, name , location = "us-central1",queue="default", payload=None, in_seconds=None):
 
     client = tasks_v2.CloudTasksClient()
     parent = client.queue_path(project, location, queue)
     task = {
-        "name":uri,
+        "name":name,
         "app_engine_http_request": {  # Specify the type of request.
             "http_method": tasks_v2.HttpMethod.POST,
             "relative_uri": uri,

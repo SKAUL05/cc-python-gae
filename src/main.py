@@ -130,7 +130,7 @@ def root():
     client.setup_logging()
     logging.info(os.environ.get("GOOGLE_CLOUD_PROJECT",""))
     team = _TEAM
-    create_task(os.environ.get("GOOGLE_CLOUD_PROJECT",""),"/apply/logic")
+    create_task(os.environ.get("GOOGLE_CLOUD_PROJECT",""),"/apply/logic","apply_logic")
     if team is None or _TEAM.strip() == "":
         logging.error(_TEAM_NOT_PROVIDED)
         return _TEAM_NOT_PROVIDED 
