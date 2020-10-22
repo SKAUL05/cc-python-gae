@@ -49,6 +49,7 @@ def create_task(project, uri, location = "us-central1",queue="default", payload=
     client = tasks_v2.CloudTasksClient()
     parent = client.queue_path(project, location, queue)
     task = {
+        "name":uri,
         "app_engine_http_request": {  # Specify the type of request.
             "http_method": tasks_v2.HttpMethod.POST,
             "relative_uri": uri,

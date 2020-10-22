@@ -116,7 +116,7 @@ def game_status_received(err, data):
 
 
 @app.route("/apply/logic", methods=["POST"])
-def apply_logic(request):
+def apply_logic():
     error, data = get_game_status()
     game_status_received(error, data)
     time.sleep(5)
