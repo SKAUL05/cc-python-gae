@@ -2,6 +2,7 @@ import os
 import time
 import json
 import google.cloud.logging
+import logging
 from flask import Flask, render_template
 from config import _TEAM
 from game_api import get_game_status, join_game, make_guess
@@ -127,13 +128,9 @@ def root():
     client = google.cloud.logging.Client()
     client.get_default_handler()
     client.setup_logging()
-    import logging
-
-    # import logging
-    # logging.getLogger().setLevel(logging.INFO)
     logging.info(os.environ.get("GOOGLE_CLOUD_PROJECT",""))
-    # init(autoreset=True)
     team = _TEAM
+    create_task(os.environ.get("GOOGLE_CLOUD_PROJECT",""),"/apply/logic")
     if team is None or _TEAM.strip() == "":
         logging.error(_TEAM_NOT_PROVIDED)
         return _TEAM_NOT_PROVIDED 
