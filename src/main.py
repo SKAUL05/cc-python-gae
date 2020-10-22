@@ -141,7 +141,7 @@ def root():
     logging.info()
     logging.info("Game Started")
     logging.info()
-    logging.info(Fore.GREEN + "I am playing as {}".format(_TEAM))
+    logging.info("I am playing as {}".format(_TEAM))
     return "Game successfully started."
 
 
