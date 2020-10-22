@@ -123,7 +123,7 @@ def apply_logic(request):
 
 @app.route("/")
 def root():
-    app_id = os.getenv('appId').split("~")[1]
+    app_id = os.environ.get("appId").split("~")[1]
     init(autoreset=True)
     team = _TEAM
     if team is None or _TEAM.strip() == "":
