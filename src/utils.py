@@ -44,7 +44,15 @@ def make_request(method, url, **kwargs):
         return error, data
 
 
-def create_task(project, uri, task_name =None, location = "us-central1",queue="default", payload=None, in_seconds=None):
+def create_task(
+    project,
+    uri,
+    task_name=None,
+    location="us-central1",
+    queue="default",
+    payload=None,
+    in_seconds=None,
+):
 
     client = tasks_v2.CloudTasksClient()
     parent = client.queue_path(project, location, queue)
@@ -61,11 +69,12 @@ def create_task(project, uri, task_name =None, location = "us-central1",queue="d
     if in_seconds is not None:
         timestamp = datetime.datetime.utcnow() + datetime.timedelta(seconds=in_seconds)
         task["schedule_time"] = timestamp
-    
+
     if task_name is not None:
         # Add the name to tasks.
-        task['name'] = "projects/{}/locations/{}/queues/{}/tasks/{}".format(project,location,queue,task_name)
-
+        task["name"] = "projects/{}/locations/{}/queues/{}/tasks/{}".format(
+            project, location, queue, task_name
+        )
 
     response = client.create_task(parent=parent, task=task)
 

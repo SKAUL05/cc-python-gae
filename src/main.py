@@ -128,12 +128,16 @@ def root():
     client = google.cloud.logging.Client()
     client.get_default_handler()
     client.setup_logging()
-    logging.info(os.environ.get("GOOGLE_CLOUD_PROJECT",""))
+    logging.info(os.environ.get("GOOGLE_CLOUD_PROJECT", ""))
     team = _TEAM
-    create_task(project = os.environ.get("GOOGLE_CLOUD_PROJECT",""),uri = "/apply/logic", task_name = "applyLogic")
+    create_task(
+        project=os.environ.get("GOOGLE_CLOUD_PROJECT", ""),
+        uri="/apply/logic",
+        task_name="apply_logic",
+    )
     if team is None or _TEAM.strip() == "":
         logging.error(_TEAM_NOT_PROVIDED)
-        return _TEAM_NOT_PROVIDED 
+        return _TEAM_NOT_PROVIDED
 
     logging.info()
     logging.info("Game Started")
