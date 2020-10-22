@@ -39,6 +39,7 @@ jobs:
       # Deploy the Docker image to the GKE cluster
       - name: Deploy Docker Image to GAE
         run: |-
+          cd src/
           gcloud app deploy --quiet --version=python --project=$PROJECT_ID --image-url=gcr.io/$PROJECT_ID/gcp-appengine
       # - id: 'deploy' 
       #   name: Deploy to GAE
