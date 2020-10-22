@@ -125,17 +125,17 @@ def apply_logic(request):
 def root():
     import logging
     logging.getLogger().setLevel(logging.INFO)
-    logging.info(os.environ)
+    logging.info(os.environ.get("GOOGLE_CLOUD_PROJECT",""))
     init(autoreset=True)
     team = _TEAM
     if team is None or _TEAM.strip() == "":
-        print(Fore.RED + _TEAM_NOT_PROVIDED)
+        logging.error(_TEAM_NOT_PROVIDED)
         return _TEAM_NOT_PROVIDED 
 
-    print()
-    print("Game Started")
-    print()
-    print(Fore.GREEN + "I am playing as {}".format(_TEAM))
+    logging.info()
+    logging.info("Game Started")
+    logging.info()
+    logging.info(Fore.GREEN + "I am playing as {}".format(_TEAM))
     return "Game successfully started."
 
 
