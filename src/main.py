@@ -123,12 +123,14 @@ def apply_logic(request):
 
 @app.route("/")
 def root():
-    app_id = os.environ.get("appId").split("~")[1]
+    import logging
+    logging.getLogger().setLevel(logging.INFO)
+    logging.info(os.environ)
     init(autoreset=True)
     team = _TEAM
     if team is None or _TEAM.strip() == "":
         print(Fore.RED + _TEAM_NOT_PROVIDED)
-        return _TEAM_NOT_PROVIDED + app_id
+        return _TEAM_NOT_PROVIDED 
 
     print()
     print("Game Started")
