@@ -1,6 +1,7 @@
 import os
 import time
 import json
+import google.cloud.logging
 from flask import Flask, render_template
 from config import _TEAM
 from game_api import get_game_status, join_game, make_guess
@@ -123,10 +124,15 @@ def apply_logic(request):
 
 @app.route("/")
 def root():
+    client = google.cloud.logging.Client()
+    client.get_default_handler()
+    client.setup_logging()
     import logging
-    logging.getLogger().setLevel(logging.INFO)
+
+    # import logging
+    # logging.getLogger().setLevel(logging.INFO)
     logging.info(os.environ.get("GOOGLE_CLOUD_PROJECT",""))
-    init(autoreset=True)
+    # init(autoreset=True)
     team = _TEAM
     if team is None or _TEAM.strip() == "":
         logging.error(_TEAM_NOT_PROVIDED)
