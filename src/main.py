@@ -15,28 +15,27 @@ _MY_GUESS_TRACKER = {}
 _TEAM_NOT_PROVIDED = (
     "Please put your team name and password into config.py and start again."
 )
+client = google.cloud.logging.Client()
+client.get_default_handler()
+client.setup_logging()
 
 
 def game_status_received(err, data):
     if err is not None:
-        print(Fore.RED + err)
-        print(Fore.RED + "Get Game Status Failed")
+        logging.error(err)
+        logging.error("Get Game Status Failed")
     else:
-        print()
-        print(
-            Fore.YELLOW + "GameId:",
-            data["gameId"],
-            Fore.YELLOW + "RoundId:",
-            data["roundId"],
-            Fore.YELLOW + "State:",
-            data["state"],
-            Fore.YELLOW + "#Participants:",
-            len(data["participants"]),
+        logging.info(
+            "GameId: {}\n RoundId: {}\n State: {}\n #Participants: {}".format(
+                data["gameId"],
+                data["roundId"],
+                data["state"],
+                len(data["participants"]),
+            )
         )
-        print(
+        logging.info(
             "------------------------------------------------------------------------------------------\n"
         )
-
         state = data["state"]
         key = str(data["gameId"]) + "-" + str(data["roundId"])
         joined_status = False
@@ -56,23 +55,22 @@ def game_status_received(err, data):
             if not joined_status:
                 err_join, data_join = join_game()
                 if err_join is not None:
-                    print(Fore.RED + "Join Failed")
-                    print(err_join)
+                    logging.error("Join Failed")
+                    logging.error(err_join)
                 else:
-                    print(Fore.GREEN + "Join Successful")
-                    print(Fore.GREEN + data_join["message"])
+                    logging.info("Join Successful")
+                    logging.info(data_join["message"])
 
             else:
-                print(Fore.YELLOW + "Already joined, waiting to play...")
+                logging.warn("Already joined, waiting to play...")
 
         elif state == "running":
             if not joined_status:
-                print(
-                    Fore.YELLOW
-                    + "Oho, I have missed the joining phase, let me wait till the next round starts"
+                logging.warn(
+                    "Oho, I have missed the joining phase, let me wait till the next round starts"
                 )
             elif not alive_status:
-                print(Fore.RED + "I am dead, waiting to respawn in next round...:(")
+                logging.error("I am dead, waiting to respawn in next round...:(")
             else:
                 my_next_guess = apply_guess(
                     data["gameId"],
@@ -82,13 +80,13 @@ def game_status_received(err, data):
                     _MY_GUESS_TRACKER,
                 )
                 if my_next_guess is not None and len(my_next_guess["guesses"]) > 0:
-                    print("My guess: {}".format(my_next_guess), "\n")
+                    logging.info("My guess: {}".format(my_next_guess), "\n")
                     json_object = json.dumps(my_next_guess)
                     err_guess, data_guess = make_guess(json_object)
 
                     if err_guess is not None:
-                        print(Fore.RED + "Guess Failed\n")
-                        print(err_guess, "\n")
+                        logging.error("Guess Failed\n")
+                        logging.error(err_guess, "\n")
 
                     else:
                         total_score_current_guess = 0
@@ -99,13 +97,12 @@ def game_status_received(err, data):
                             for item in data_guess["guesses"]:
                                 if "score" in item:
                                     total_score_current_guess += item["score"]
-                        print(
-                            Fore.GREEN
-                            + "Guess Successful : Score {}\n".format(
+                        logging.info(
+                            "Guess Successful : Score {}\n".format(
                                 total_score_current_guess
                             )
                         )
-                        print("Result : {}".format(data_guess))
+                        logging.info("Result : {}".format(data_guess))
 
                         guess_key = "Round-" + str(data["roundId"])
 
@@ -120,14 +117,16 @@ def apply_logic():
     error, data = get_game_status()
     game_status_received(error, data)
     time.sleep(5)
-    return
+    create_task(
+        project=os.environ.get("GOOGLE_CLOUD_PROJECT", ""),
+        uri="/apply/logic",
+        task_name="apply_logic",
+    )
+    return None
 
 
 @app.route("/")
 def root():
-    client = google.cloud.logging.Client()
-    client.get_default_handler()
-    client.setup_logging()
     logging.info(os.environ.get("GOOGLE_CLOUD_PROJECT", ""))
     team = _TEAM
     create_task(
