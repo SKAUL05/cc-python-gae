@@ -29,28 +29,31 @@ def game_status_received(err, data):
             "GameId: {}\n RoundId: {}\n State: {}\n #Participants: {}".format(
                 data["gameId"],
                 data["roundId"],
-                data["state"],
+                data["status"],
                 len(data["participants"]),
             )
         )
         logging.info(
             "------------------------------------------------------------------------------------------\n"
         )
-        state = data["state"]
+        state = data["status"]
         key = str(data["gameId"]) + "-" + str(data["roundId"])
         joined_status = False
         alive_status = False
         team_name = _TEAM.upper()
         for participant in data["participants"]:
+            logging.info(team_name)
+            logging.info(participant)
+            participant_id = participant.get("teamId","").upper()
+            logging.info("Participant Id {}".format(participant_id))
             if (
-                "name" in participant
-                and participant["name"] == team_name
-                and participant["joinedInThisRound"] == True
+                participant_id == team_name
+                # and participant["joinedInThisRound"] == True
             ):
                 joined_status = True
                 alive_status = participant["isAlive"]
 
-        if state == "joining":
+        if state.lower() == "joining":
 
             if not joined_status:
                 err_join, data_join = join_game()
@@ -62,11 +65,11 @@ def game_status_received(err, data):
                     logging.info(data_join["message"])
 
             else:
-                logging.warn("Already joined, waiting to play...")
+                logging.info("Already joined, waiting to play...")
 
-        elif state == "running":
+        elif state.lower() == "running":
             if not joined_status:
-                logging.warn(
+                logging.info(
                     "Oho, I have missed the joining phase, let me wait till the next round starts"
                 )
             elif not alive_status:
@@ -80,7 +83,7 @@ def game_status_received(err, data):
                     _MY_GUESS_TRACKER,
                 )
                 if my_next_guess is not None and len(my_next_guess["guesses"]) > 0:
-                    logging.info("My guess: {}".format(my_next_guess), "\n")
+                    logging.info(my_next_guess)
                     json_object = json.dumps(my_next_guess)
                     err_guess, data_guess = make_guess(json_object)
 
@@ -111,17 +114,18 @@ def game_status_received(err, data):
 
                         _MY_GUESS_TRACKER[key].append(data_guess)
 
+    return "Game Move Done!"
 
 @app.route("/apply/logic", methods=["POST"])
 def apply_logic():
     error, data = get_game_status()
-    game_status_received(error, data)
-    create_task(
+    game_status = game_status_received(error, data)
+    time.sleep(5)
+    response = create_task(
         project=os.environ.get("GOOGLE_CLOUD_PROJECT", ""),
-        uri="/apply/logic",
-        in_seconds=5
-    )
-    return None
+        uri="/apply/logic"
+            )
+    return "Task Created Successfully"
 
 
 @app.route("/")

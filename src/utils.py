@@ -1,14 +1,19 @@
 from google.cloud import tasks_v2
 import requests
 import datetime
+import google.cloud.logging
+import logging
 
+client = google.cloud.logging.Client()
+client.get_default_handler()
+client.setup_logging()
 
 def to_dict(response_obj):
     response_json = {}
     try:
         response_json = response_obj.json()
     except Exception as e:
-        print(e)
+        logging.error(e)
         return "Exception Occurred", None, None
     finally:
         error = None
@@ -31,7 +36,7 @@ def make_request(method, url, **kwargs):
         elif method == "POST":
             response = requests.post(url, **kwargs)
     except requests.exceptions.RequestException as e:
-        print(e)
+        logging.error(e)
         return "Exception Occurred", None
     finally:
         error = None
@@ -78,5 +83,5 @@ def create_task(
 
     response = client.create_task(parent=parent, task=task)
 
-    print("Created task {}".format(response.name))
+    logging.info("Created task {}".format(response.name))
     return response
