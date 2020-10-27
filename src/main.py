@@ -15,9 +15,11 @@ _MY_GUESS_TRACKER = {}
 _TEAM_NOT_PROVIDED = (
     "Please put your team name and password into config.py and start again."
 )
-client = google.cloud.logging.Client()
-client.get_default_handler()
-client.setup_logging()
+logging.getLogger().setLevel(logging.INFO)
+
+# client = google.cloud.logging.Client()
+# client.get_default_handler()
+# client.setup_logging()
 
 
 def game_status_received(err, data):

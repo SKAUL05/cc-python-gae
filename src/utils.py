@@ -3,10 +3,11 @@ import requests
 import datetime
 import google.cloud.logging
 import logging
+logging.getLogger().setLevel(logging.INFO)
 
-client = google.cloud.logging.Client()
-client.get_default_handler()
-client.setup_logging()
+# client = google.cloud.logging.Client()
+# client.get_default_handler()
+# client.setup_logging()
 
 def to_dict(response_obj):
     response_json = {}
