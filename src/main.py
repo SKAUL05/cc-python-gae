@@ -116,11 +116,10 @@ def game_status_received(err, data):
 def apply_logic():
     error, data = get_game_status()
     game_status_received(error, data)
-    time.sleep(5)
     create_task(
         project=os.environ.get("GOOGLE_CLOUD_PROJECT", ""),
         uri="/apply/logic",
-        task_name="apply_logic",
+        in_seconds=5
     )
     return None
 
@@ -129,18 +128,17 @@ def apply_logic():
 def root():
     logging.info(os.environ.get("GOOGLE_CLOUD_PROJECT", ""))
     team = _TEAM
-    create_task(
-        project=os.environ.get("GOOGLE_CLOUD_PROJECT", ""),
-        uri="/apply/logic",
-        task_name="apply_logic",
-    )
     if team is None or _TEAM.strip() == "":
         logging.error(_TEAM_NOT_PROVIDED)
         return _TEAM_NOT_PROVIDED
-
-    logging.info()
+    
+    create_task(
+        project=os.environ.get("GOOGLE_CLOUD_PROJECT", ""),
+        uri="/apply/logic",
+    )
+    logging.info("----------------------------------------------------------")
     logging.info("Game Started")
-    logging.info()
+    logging.info("----------------------------------------------------------")
     logging.info("I am playing as {}".format(_TEAM))
     return "Game successfully started."
 

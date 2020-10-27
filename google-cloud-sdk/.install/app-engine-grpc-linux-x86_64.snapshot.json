@@ -1,0 +1,43 @@
+{
+  "components": [
+    {
+      "data": {
+        "contents_checksum": "1b1cfad1979caf370bd308a725e30623f6f65fea5370481b39fe9e3ebe23f6a2",
+        "source": "",
+        "type": "tar"
+      },
+      "dependencies": [
+        "app-engine-grpc",
+        "app-engine-python",
+        "core"
+      ],
+      "details": {
+        "description": "Provides the gRPC python library for app engine.",
+        "display_name": "gRPC python library"
+      },
+      "id": "app-engine-grpc-linux-x86_64",
+      "is_configuration": false,
+      "is_hidden": true,
+      "is_required": false,
+      "platform": {
+        "architectures": [
+          "x86_64"
+        ],
+        "operating_systems": [
+          "LINUX"
+        ]
+      },
+      "version": {
+        "build_number": 20190426144518,
+        "version_string": "1.20.0"
+      }
+    }
+  ],
+  "revision": 20201016191216,
+  "schema_version": {
+    "no_update": false,
+    "url": "https://dl.google.com/dl/cloudsdk/channels/rapid/google-cloud-sdk.tar.gz",
+    "version": 3
+  },
+  "version": "315.0.0"
+}
