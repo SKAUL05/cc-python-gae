@@ -2,46 +2,18 @@ import os
 import time
 import json
 import logging
-from google.cloud import logging as gcp_logging
-from google.cloud.logging.handlers import CloudLoggingHandler, AppEngineHandler, setup_logging
 from flask import Flask, render_template
 from config import _TEAM
 from game_api import get_game_status, join_game, make_guess
 from my_smart_algo import apply_guess
-from utils import create_task
+from utils import create_task, logger_initialise
 
 app = Flask(__name__)
 _MY_GUESS_TRACKER = {}
 _TEAM_NOT_PROVIDED = (
     "Please put your team name and password into config.py and start again."
 )
-client = gcp_logging.Client()
-handler = CloudLoggingHandler(client)
-logging.getLogger().setLevel(logging.INFO) # defaults to WARN
-setup_logging(handler, excluded_loggers=('werkzeug','gunicorn'))
-z = {'name':[],'handler':[]}
-for handler in logging.getLogger().handlers:
-    if handler.name not in z['name']:
-        z['handler'].append(handler)
-        z['name'].append(handler.name)
-
-
-logging.getLogger().handlers = z['handler']
-logging.info(z)
-logging.info(logging.getLogger().handlers)
-
-
-# logging_client = gcp_logging.Client()
-# logging_client.setup_logging(log_level=logging.INFO)
-# root_logger = logging.getLogger()
-# # use the GCP handler ONLY in order to prevent logs from getting written to STDERR
-# new_handlers = []
-# set_handlers = []
-# for handler in root_logger.handlers:
-#     if handler.name not in new_handlers:
-#         new_handlers.append(handler.name)
-#         set_handlers.append(handler)
-# root_logger.handlers = set_handlers
+logger_initialise()
 
 
 def game_status_received(err, data):
@@ -68,10 +40,11 @@ def game_status_received(err, data):
         for participant in data["participants"]:
             logging.info(team_name)
             logging.info(participant)
-            participant_id = participant.get("teamId","").upper()
+            participant_id = participant.get("teamId", "").upper()
             logging.info("Participant Id {}".format(participant_id))
             if (
-                participant_id == team_name
+                participant_id
+                == team_name
                 # and participant["joinedInThisRound"] == True
             ):
                 joined_status = True
@@ -140,15 +113,15 @@ def game_status_received(err, data):
 
     return "Game Move Done!"
 
+
 @app.route("/apply/logic", methods=["POST"])
 def apply_logic():
     error, data = get_game_status()
     game_status = game_status_received(error, data)
     time.sleep(5)
     response = create_task(
-        project=os.environ.get("GOOGLE_CLOUD_PROJECT", ""),
-        uri="/apply/logic"
-            )
+        project=os.environ.get("GOOGLE_CLOUD_PROJECT", ""), uri="/apply/logic"
+    )
     return "Task Created Successfully"
 
 
@@ -159,7 +132,7 @@ def root():
     if team is None or _TEAM.strip() == "":
         logging.error(_TEAM_NOT_PROVIDED)
         return _TEAM_NOT_PROVIDED
-    
+
     create_task(
         project=os.environ.get("GOOGLE_CLOUD_PROJECT", ""),
         uri="/apply/logic",

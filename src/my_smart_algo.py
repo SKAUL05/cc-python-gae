@@ -2,21 +2,10 @@ import random
 import math
 import json
 import logging
-from google.cloud import logging as gcp_logging
-from google.cloud.logging.handlers import CloudLoggingHandler, AppEngineHandler, setup_logging
+from utils import logger_initialise
 
-client = gcp_logging.Client()
-handler = AppEngineHandler(client)
-logging.getLogger().setLevel(logging.INFO) # defaults to WARN
-setup_logging(handler, excluded_loggers=('werkzeug','gunicorn'))
-z = {'name':[],'handler':[]}
-for handler in logging.getLogger().handlers:
-    if handler.name not in z['name']:
-        z['handler'].append(handler)
-        z['name'].append(handler.name)
+logger_initialise()
 
-
-logging.getLogger().handlers = z['handler']
 
 def apply_guess(game_id, round_id, secret_length, participants, tracker):
     logging.info("In Apply Guess")
@@ -40,9 +29,7 @@ def apply_guess(game_id, round_id, secret_length, participants, tracker):
 
     for random_guess in range(5):
         try:
-            participant = participants[
-                random.randint(0, total_participants - 1)
-            ]
+            participant = participants[random.randint(0, total_participants - 1)]
             secret_range = math.pow(10, secret_length - 1)
             secret = random.randint(secret_range, secret_range * 10 - 1)
             guess = {}

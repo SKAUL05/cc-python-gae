@@ -3,20 +3,8 @@ import datetime
 import logging
 from google.cloud import tasks_v2
 from google.cloud import logging as gcp_logging
-from google.cloud.logging.handlers import CloudLoggingHandler, AppEngineHandler, setup_logging
+from google.cloud.logging.handlers import AppEngineHandler, setup_logging
 
-client = gcp_logging.Client()
-handler = AppEngineHandler(client)
-logging.getLogger().setLevel(logging.INFO) # defaults to WARN
-setup_logging(handler, excluded_loggers=('werkzeug','gunicorn'))
-z = {'name':[],'handler':[]}
-for handler in logging.getLogger().handlers:
-    if handler.name not in z['name']:
-        z['handler'].append(handler)
-        z['name'].append(handler.name)
-
-
-logging.getLogger().handlers = z['handler']
 
 def to_dict(response_obj):
     response_json = {}
@@ -95,3 +83,16 @@ def create_task(
 
     logging.info("Created task {}".format(response.name))
     return response
+
+
+def logger_initialise():
+    client = gcp_logging.Client()
+    handler = AppEngineHandler(client)
+    logging.getLogger().setLevel(logging.INFO)  # defaults to WARN
+    setup_logging(handler)
+    log_dict = {"name": [], "handler": []}
+    for handler in logging.getLogger().handlers:
+        if handler.name not in log_dict["name"]:
+            log_dict["handler"].append(handler)
+            log_dict["name"].append(handler.name)
+    logging.getLogger().handlers = log_dict["handler"]
