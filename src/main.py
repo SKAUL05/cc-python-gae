@@ -19,7 +19,16 @@ client = gcp_logging.Client()
 handler = CloudLoggingHandler(client)
 logging.getLogger().setLevel(logging.INFO) # defaults to WARN
 setup_logging(handler, excluded_loggers=('werkzeug','gunicorn'))
-logging.getLogger().handlers = logging.getLogger().handlers[0:2]
+z = {'name':[],'handler':[]}
+for handler in logging.getLogger().handlers:
+    if handler.name not in z['name']:
+        z['handler'].append(handler)
+        z['name'].append(handler.name)
+
+
+logging.getLogger().handlers = z['handler']
+logging.info(z)
+logging.info(logging.getLogger().handlers)
 
 
 # logging_client = gcp_logging.Client()
