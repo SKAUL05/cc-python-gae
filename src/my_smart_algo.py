@@ -3,11 +3,12 @@ import math
 import json
 from config import _TEAM
 import google.cloud.logging
-import logging
-
+# logging.getLogger().setLevel(logging.INFO)
 client = google.cloud.logging.Client()
 client.get_default_handler()
 client.setup_logging()
+import logging
+
 
 def apply_guess(game_id, round_id, secret_length, participants, tracker):
     logging.info("In Apply Guess")
