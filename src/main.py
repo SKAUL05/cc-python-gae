@@ -1,13 +1,13 @@
 import os
 import time
 import json
-import google.cloud.logging
 import logging
+from google.cloud import logging as gcp_logging
+from google.cloud.logging.handlers import CloudLoggingHandler, AppEngineHandler, setup_logging
 from flask import Flask, render_template
 from config import _TEAM
 from game_api import get_game_status, join_game, make_guess
 from my_smart_algo import apply_guess
-from colorama import init, Fore, Style
 from utils import create_task
 
 app = Flask(__name__)
@@ -15,11 +15,24 @@ _MY_GUESS_TRACKER = {}
 _TEAM_NOT_PROVIDED = (
     "Please put your team name and password into config.py and start again."
 )
-# logging.getLogger().setLevel(logging.INFO)
+client = gcp_logging.Client()
+handler = CloudLoggingHandler(client)
+logging.getLogger().setLevel(logging.INFO) # defaults to WARN
+setup_logging(handler, excluded_loggers=('werkzeug','gunicorn'))
+logging.getLogger().handlers = logging.getLogger().handlers[0:2]
 
-client = google.cloud.logging.Client()
-client.get_default_handler()
-client.setup_logging()
+
+# logging_client = gcp_logging.Client()
+# logging_client.setup_logging(log_level=logging.INFO)
+# root_logger = logging.getLogger()
+# # use the GCP handler ONLY in order to prevent logs from getting written to STDERR
+# new_handlers = []
+# set_handlers = []
+# for handler in root_logger.handlers:
+#     if handler.name not in new_handlers:
+#         new_handlers.append(handler.name)
+#         set_handlers.append(handler)
+# root_logger.handlers = set_handlers
 
 
 def game_status_received(err, data):

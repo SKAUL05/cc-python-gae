@@ -1,15 +1,15 @@
-from google.cloud import tasks_v2
 import requests
 import datetime
-import google.cloud.logging
 import logging
+from google.cloud import tasks_v2
+from google.cloud import logging as gcp_logging
+from google.cloud.logging.handlers import CloudLoggingHandler, AppEngineHandler, setup_logging
 
-# logging.getLogger().setLevel(logging.INFO)
-
-client = google.cloud.logging.Client()
-client.get_default_handler()
-client.setup_logging()
-
+client = gcp_logging.Client()
+handler = CloudLoggingHandler(client)
+logging.getLogger().setLevel(logging.INFO) # defaults to WARN
+setup_logging(handler, excluded_loggers=('werkzeug','gunicorn'))
+logging.getLogger().handlers = logging.getLogger().handlers[0:2]
 
 def to_dict(response_obj):
     response_json = {}

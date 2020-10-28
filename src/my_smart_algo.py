@@ -1,14 +1,15 @@
 import random
 import math
 import json
-from config import _TEAM
-import google.cloud.logging
-# logging.getLogger().setLevel(logging.INFO)
-client = google.cloud.logging.Client()
-client.get_default_handler()
-client.setup_logging()
 import logging
+from google.cloud import logging as gcp_logging
+from google.cloud.logging.handlers import CloudLoggingHandler, AppEngineHandler, setup_logging
 
+client = gcp_logging.Client()
+handler = CloudLoggingHandler(client)
+logging.getLogger().setLevel(logging.INFO) # defaults to WARN
+setup_logging(handler, excluded_loggers=('werkzeug','gunicorn'))
+logging.getLogger().handlers = logging.getLogger().handlers[0:2]
 
 def apply_guess(game_id, round_id, secret_length, participants, tracker):
     logging.info("In Apply Guess")
