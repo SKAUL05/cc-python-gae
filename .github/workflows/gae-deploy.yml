@@ -35,7 +35,7 @@ jobs:
       # Push the Docker image to Google Container Registry
       - name: Publish Docker Image
         run: |-
-          cd src/
+          cd src/ 
           docker push "gcr.io/$PROJECT_ID/gcp-appengine"
     
       # Deploy the Docker image to the GKE cluster
