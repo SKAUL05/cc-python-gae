@@ -3,6 +3,7 @@ import math
 import json
 import logging
 from utils import logger_initialise
+from config import _TEAM
 
 logger_initialise()
 
@@ -26,6 +27,10 @@ def apply_guess(game_id, round_id, secret_length, participants, tracker):
             del participants[index]
 
     total_participants = len(participants)
+
+    if not total_participants:
+        logging.warn("No Participants found, will wait till someone joins!")
+        return None
 
     for random_guess in range(5):
         try:

@@ -59,7 +59,7 @@ def game_status_received(err, data):
                     logging.error(err_join)
                 else:
                     logging.info("Join Successful")
-                    logging.info(data_join["message"])
+                    logging.info(data_join["gameId"])
 
             else:
                 logging.info("Already joined, waiting to play...")
