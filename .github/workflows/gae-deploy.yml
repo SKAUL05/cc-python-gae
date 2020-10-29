@@ -2,7 +2,7 @@ name: Deploy to GAE
 
 on:
   push:
-    branches: [ master,sdk-working ]
+    branches: [ master ]
 
 env:
   PROJECT_ID: ${{ secrets.PROJECT_ID }}
