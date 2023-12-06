@@ -5,9 +5,9 @@ from requests.auth import HTTPBasicAuth
 
 auth = HTTPBasicAuth(_TEAM, _PASSWORD)
 
-join = _BASE_API + "/api/join"
-status = _BASE_API + "/api/gamestatus"
-guess = _BASE_API + "/api/guess"
+join = f"{_BASE_API}/api/join"
+status = f"{_BASE_API}/api/gamestatus"
+guess = f"{_BASE_API}/api/guess"
 
 
 def join_game():

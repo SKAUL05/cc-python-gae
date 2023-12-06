@@ -26,12 +26,7 @@ def game_status_received(err, data):
         logging.error("Get Game Status Failed")
     else:
         logging.info(
-            "GameId: {}\n RoundId: {}\n State: {}\n #Participants: {}".format(
-                data["gameId"],
-                data["roundId"],
-                data["state"],
-                len(data["participants"]),
-            )
+            f'GameId: {data["gameId"]}\n RoundId: {data["roundId"]}\n State: {data["state"]}\n #Participants: {len(data["participants"])}'
         )
         logging.info(
             "------------------------------------------------------------------------------------------\n"
@@ -80,7 +75,7 @@ def game_status_received(err, data):
                     _MY_GUESS_TRACKER,
                 )
                 if my_next_guess is not None and len(my_next_guess["guesses"]) > 0:
-                    logging.info("My guess: {}".format(my_next_guess), "\n")
+                    logging.info(f"My guess: {my_next_guess}", "\n")
                     json_object = json.dumps(my_next_guess)
                     err_guess, data_guess = make_guess(json_object)
 
@@ -97,12 +92,8 @@ def game_status_received(err, data):
                             for item in data_guess["guesses"]:
                                 if "score" in item:
                                     total_score_current_guess += item["score"]
-                        logging.info(
-                            "Guess Successful : Score {}\n".format(
-                                total_score_current_guess
-                            )
-                        )
-                        logging.info("Result : {}".format(data_guess))
+                        logging.info(f"Guess Successful : Score {total_score_current_guess}\n")
+                        logging.info(f"Result : {data_guess}")
 
                         guess_key = "Round-" + str(data["roundId"])
 
@@ -141,7 +132,7 @@ def root():
     logging.info()
     logging.info("Game Started")
     logging.info()
-    logging.info("I am playing as {}".format(_TEAM))
+    logging.info(f"I am playing as {_TEAM}")
     return "Game successfully started."
 
 
