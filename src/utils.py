@@ -13,13 +13,13 @@ def to_dict(response_obj):
     finally:
         error = None
         data = None
-        status_code = response_obj.status_code
         if "err" in response_json and response_json["err"] is not None:
             error = response_json["err"]
         if "data" in response_json and response_json["data"] is not None:
             data = response_json["data"]
         if error is None and data is None:
             return "Get Game Status Failed", None, None
+        status_code = response_obj.status_code
         return error, data, status_code
 
 
@@ -72,11 +72,11 @@ def create_task(
 
     if task_name is not None:
         # Add the name to tasks.
-        task["name"] = "projects/{}/locations/{}/queues/{}/tasks/{}".format(
-            project, location, queue, task_name
-        )
+        task[
+            "name"
+        ] = f"projects/{project}/locations/{location}/queues/{queue}/tasks/{task_name}"
 
     response = client.create_task(parent=parent, task=task)
 
-    print("Created task {}".format(response.name))
+    print(f"Created task {response.name}")
     return response
